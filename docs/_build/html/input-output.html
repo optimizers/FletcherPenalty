@@ -1,0 +1,683 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Input &mdash; Fletcher Penalty 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="next" title="Code Overview" href="code-overview.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Fletcher Penalty
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Input</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#fletcher-solver-inputs">fletcher_solver Inputs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#lsq-options">lsq_options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#subsolver-options">subsolver_options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#merit-options">merit_options</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#output">Output</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code-overview.html">Code Overview</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Fletcher Penalty</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Input</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/input-output.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="input">
+<h1>Input<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h1>
+<p>The basic solver is called via</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="o">%</span> <span class="n">nlp</span> <span class="ow">is</span> <span class="n">instance</span> <span class="n">of</span> <span class="n">nlpmodel</span> <span class="k">class</span>
+<span class="nc">fs</span> <span class="o">=</span> <span class="n">fletcher_solver</span><span class="p">(</span><span class="n">nlp</span><span class="p">,</span> <span class="n">varargin</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Note</strong>: the original problem (nlp) should be expressed in slack form (equality constraints only).</p>
+<div class="section" id="fletcher-solver-inputs">
+<h2>fletcher_solver Inputs<a class="headerlink" href="#fletcher-solver-inputs" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="docutils">
+<colgroup>
+<col width="17%" />
+<col width="8%" />
+<col width="16%" />
+<col width="60%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Required</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>nlp</td>
+<td>required</td>
+<td>&nbsp;</td>
+<td>Optimization problem to be solved (nlpmodel)</td>
+</tr>
+<tr class="row-odd"><td>fid</td>
+<td>optional</td>
+<td>1</td>
+<td>Save iteration log in subsolver.log?</td>
+</tr>
+<tr class="row-even"><td>logLevel</td>
+<td>optional</td>
+<td>1</td>
+<td>0 (don&#8217;t print log), 1 (print log)</td>
+</tr>
+<tr class="row-odd"><td>nlnFlag</td>
+<td>optional</td>
+<td>1</td>
+<td>Keep linear constraints explicit?</td>
+</tr>
+<tr class="row-even"><td>sigma</td>
+<td>optional</td>
+<td>1</td>
+<td>Penalty parameter</td>
+</tr>
+<tr class="row-odd"><td>sigma_min</td>
+<td>optional</td>
+<td><span class="math">\(10^{-6}\)</span></td>
+<td>Minimum penalty parameter</td>
+</tr>
+<tr class="row-even"><td>sigma_max</td>
+<td>optional</td>
+<td><span class="math">\(10^6\)</span></td>
+<td>Maximum penalty parameter</td>
+</tr>
+<tr class="row-odd"><td>sigma_strategy</td>
+<td>optional</td>
+<td>SIGMA_ADAPTIVE</td>
+<td>SIGMA_ADAPTIVE or SIGMA_FIXED</td>
+</tr>
+<tr class="row-even"><td>delta</td>
+<td>optional</td>
+<td><span class="math">\(10^{-8}\)</span></td>
+<td>Regularization parameter (ignored if lsq.regularized = false)</td>
+</tr>
+<tr class="row-odd"><td>delta_min</td>
+<td>optional</td>
+<td><span class="math">\(10^{-8}\)</span></td>
+<td>Minimum regularization parameter</td>
+</tr>
+<tr class="row-even"><td>delta_dec</td>
+<td>optional</td>
+<td><code class="docutils literal"><span class="pre">&#64;(d)</span> <span class="pre">d/10</span></code></td>
+<td>Function to update delta</td>
+</tr>
+<tr class="row-odd"><td>lsq_options</td>
+<td>optional</td>
+<td><code class="docutils literal"><span class="pre">struct()</span></code></td>
+<td>See below</td>
+</tr>
+<tr class="row-even"><td>lsq_method</td>
+<td>optional</td>
+<td>LSQ_SNE</td>
+<td>Method for solving augmented system</td>
+</tr>
+<tr class="row-odd"><td>subsolver</td>
+<td>optional</td>
+<td>BCFLASH</td>
+<td>Solver for minimizing penalty function</td>
+</tr>
+<tr class="row-even"><td>optTolAbs</td>
+<td>optional</td>
+<td><span class="math">\(10^{-6}\)</span></td>
+<td>Absolute tolerance for Lagrangian gradient</td>
+</tr>
+<tr class="row-odd"><td>optTolRel</td>
+<td>optional</td>
+<td><span class="math">\(10^{-6}\)</span></td>
+<td>Relative tolerance for Lagrangian gradient</td>
+</tr>
+<tr class="row-even"><td>feaTolAbs</td>
+<td>optional</td>
+<td><span class="math">\(10^{-6}\)</span></td>
+<td>Absolute tolerance for primal feasibility</td>
+</tr>
+<tr class="row-odd"><td>feaTolRel</td>
+<td>optional</td>
+<td><span class="math">\(10^{-6}\)</span></td>
+<td>Relative tolerance for primal feasibility</td>
+</tr>
+<tr class="row-even"><td>max_iterations</td>
+<td>optional</td>
+<td>500</td>
+<td>Maximum number of outer iterations</td>
+</tr>
+<tr class="row-odd"><td>check_grad</td>
+<td>optional</td>
+<td>false</td>
+<td>Run gradient checker every iteration?</td>
+</tr>
+<tr class="row-even"><td>subsolver_options</td>
+<td>optional</td>
+<td><code class="docutils literal"><span class="pre">struct()</span></code></td>
+<td>See below</td>
+</tr>
+<tr class="row-odd"><td>merit_options</td>
+<td>optional</td>
+<td><code class="docutils literal"><span class="pre">struct()</span></code></td>
+<td>See below</td>
+</tr>
+<tr class="row-even"><td>x0</td>
+<td>optional</td>
+<td>nlp.x0</td>
+<td>Initial point</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="lsq-options">
+<h2>lsq_options<a class="headerlink" href="#lsq-options" title="Permalink to this headline">¶</a></h2>
+<p>Depends on <code class="docutils literal"><span class="pre">lsq_method</span></code>:</p>
+<ul>
+<li><p class="first">LSQ_SNE</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="21%" />
+<col width="20%" />
+<col width="59%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>regularized</td>
+<td>true</td>
+<td>Regularize penalty function?</td>
+</tr>
+<tr class="row-odd"><td>delta_max</td>
+<td><span class="math">\(10^{-4}\)</span></td>
+<td>Maximum regularization parameter</td>
+</tr>
+<tr class="row-even"><td>cond_max</td>
+<td><span class="math">\(10^8\)</span></td>
+<td>Maximum allowable condition number of <span class="math">\(A\)</span></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><dl class="first docutils">
+<dt>LSQ_LDL</dt>
+<dd><table border="1" class="first last docutils">
+<colgroup>
+<col width="17%" />
+<col width="16%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>regularized</td>
+<td>true</td>
+<td>Regularize penalty function?</td>
+</tr>
+<tr class="row-odd"><td>delta_max</td>
+<td><span class="math">\(10^{-4}\)</span></td>
+<td>Maximum regularization parameter</td>
+</tr>
+<tr class="row-even"><td>cond_max</td>
+<td><span class="math">\(10^8\)</span></td>
+<td>Maximum allowable condition number of <span class="math">\(A\)</span></td>
+</tr>
+<tr class="row-odd"><td>static_p</td>
+<td>false</td>
+<td>Use static reordering? If true, LDL is faster but possibly unstable.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>LSQ_MINRES</dt>
+<dd><table border="1" class="first last docutils">
+<colgroup>
+<col width="26%" />
+<col width="25%" />
+<col width="49%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>regularized</td>
+<td>true</td>
+<td>Regularize penalty function?</td>
+</tr>
+<tr class="row-odd"><td>delta_max</td>
+<td><span class="math">\(10^{-4}\)</span></td>
+<td>Maximum regularization parameter</td>
+</tr>
+<tr class="row-even"><td>tol</td>
+<td><span class="math">\(10^{-8}\)</span></td>
+<td>Residual norm at tolerance</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>LSQ_LNLQ</dt>
+<dd><table border="1" class="first last docutils">
+<colgroup>
+<col width="29%" />
+<col width="22%" />
+<col width="49%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>regularized</td>
+<td>true</td>
+<td>Regularize penalty function?</td>
+</tr>
+<tr class="row-odd"><td>delta_max</td>
+<td><span class="math">\(10^{-4}\)</span></td>
+<td>Maximum regularization parameter</td>
+</tr>
+<tr class="row-even"><td>termination_condition</td>
+<td>TOL_RESIDUAL</td>
+<td>TOL_RESIDUAL or TOL_ERROR</td>
+</tr>
+<tr class="row-odd"><td>tol</td>
+<td><span class="math">\(10^{-8}\)</span></td>
+<td>Residual or error norm at tolerance</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="subsolver-options">
+<h2>subsolver_options<a class="headerlink" href="#subsolver-options" title="Permalink to this headline">¶</a></h2>
+<p>Depends on <code class="docutils literal"><span class="pre">subsolver</span></code>:</p>
+<ul>
+<li><p class="first">BCFLASH</p>
+<blockquote>
+<div><p>See BCFLASH for optional arguments.</p>
+</div></blockquote>
+</li>
+<li><p class="first">KNITRO</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="35%" />
+<col width="27%" />
+<col width="38%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>x0</td>
+<td>nlp.x0</td>
+<td>Initial point</td>
+</tr>
+<tr class="row-odd"><td>opt_file</td>
+<td>[]</td>
+<td>Options file for KNITRO</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">TRPCG</p>
+<blockquote>
+<div><p>None for now.</p>
+</div></blockquote>
+</li>
+<li><p class="first">IPOPT</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="23%" />
+<col width="17%" />
+<col width="60%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>x0</td>
+<td>nlp.x0</td>
+<td>Initial point</td>
+</tr>
+<tr class="row-odd"><td>mu_strategy</td>
+<td>adaptive</td>
+<td>Strategy for updating barrier parameter (see IPOPT docs)</td>
+</tr>
+<tr class="row-even"><td>start_feasible</td>
+<td>true</td>
+<td>Move to feasible point first?</td>
+</tr>
+<tr class="row-odd"><td>fid</td>
+<td><code class="docutils literal"><span class="pre">''</span></code></td>
+<td>Output file for IPOPT log</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+<li><p class="first">SNOPT</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="34%" />
+<col width="26%" />
+<col width="40%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>x0</td>
+<td>nlp.x0</td>
+<td>Initial point</td>
+</tr>
+<tr class="row-odd"><td>snfid</td>
+<td><code class="docutils literal"><span class="pre">''</span></code></td>
+<td>Output file for SNOPT log</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</li>
+</ul>
+</div>
+<div class="section" id="merit-options">
+<h2>merit_options<a class="headerlink" href="#merit-options" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="26%" />
+<col width="20%" />
+<col width="54%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Default</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>rho</td>
+<td>0</td>
+<td>Penalty parameter for <span class="math">\(\ell_2\)</span>-penalty</td>
+</tr>
+<tr class="row-odd"><td>hprod</td>
+<td>1</td>
+<td>Hessian product approximation (1-4)</td>
+</tr>
+<tr class="row-even"><td>lin_explicit</td>
+<td>false</td>
+<td>Keep linear constraints explicit?</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="output">
+<h1>Output<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h1>
+<p><code class="docutils literal"><span class="pre">fs</span> <span class="pre">=</span> <span class="pre">fletcher_solver(...)</span></code> returns an instance of the fletcher_solver object, which will contain the following additional fields:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="33%" />
+<col width="67%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>sol.x</td>
+<td>Primal solution</td>
+</tr>
+<tr class="row-odd"><td>sol.y</td>
+<td>Dual solution</td>
+</tr>
+<tr class="row-even"><td>sol.f</td>
+<td>Final objective value</td>
+</tr>
+<tr class="row-odd"><td>sol.info</td>
+<td>Additional subsolver-dependent information</td>
+</tr>
+<tr class="row-even"><td>exit</td>
+<td>Exit flag</td>
+</tr>
+<tr class="row-odd"><td>exit_msg</td>
+<td>Exit message</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="code-overview.html" class="btn btn-neutral float-right" title="Code Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="installation.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Ron Estrin, Michael P. Friedlander, Dominique Orban, Michael A. Saunders.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: ''
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

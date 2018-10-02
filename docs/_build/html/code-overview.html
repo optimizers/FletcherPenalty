@@ -1,0 +1,296 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Code Overview &mdash; Fletcher Penalty 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="prev" title="Input-Output" href="input-output.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Fletcher Penalty
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input-output.html">Input-Output</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Code Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#solvers">+solvers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#least-squares">+least_squares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#utils-and-helpers">+utils and +helpers</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Fletcher Penalty</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Code Overview</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/code-overview.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="code-overview">
+<h1>Code Overview<a class="headerlink" href="#code-overview" title="Permalink to this headline">¶</a></h1>
+<p>The code is organized into several packages that handle various aspects.</p>
+<div class="section" id="solvers">
+<h2>+solvers<a class="headerlink" href="#solvers" title="Permalink to this headline">¶</a></h2>
+<p>This package contains interfaces to several solvers that can be used to minimize <code class="docutils literal"><span class="pre">\phi_{\sigma}</span></code>. Each interface must implement 2 methods (other than a constructor):</p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">[fletcher,</span> <span class="pre">info]</span> <span class="pre">=</span> <span class="pre">solve()</span></code></p>
+<blockquote>
+<div><p>This calls the subsolver on the penalty function, and returns the <code class="docutils literal"><span class="pre">fletcher_solver</span></code> object, and an <code class="docutils literal"><span class="pre">info</span></code> struct:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">info.sol.x</span></code>: primal solution</li>
+<li><code class="docutils literal"><span class="pre">info.sol.y</span></code>: dual solution</li>
+<li><code class="docutils literal"><span class="pre">info.sol.f</span></code>: final objective value</li>
+</ul>
+</div></blockquote>
+</div></blockquote>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">[...]</span> <span class="pre">=</span> <span class="pre">post_iteration(...)</span></code></p>
+<blockquote>
+<div><p>This function should get called at the end of every iteration of the subsolver. It must at some point call <code class="docutils literal"><span class="pre">fletcher_solver.post_iteration()</span></code>.</p>
+</div></blockquote>
+</li>
+</ul>
+<p>Currently supported solvers:</p>
+<blockquote>
+<div><ul class="simple">
+<li>BCFLASH (equality constraints only)</li>
+<li>TRPCG (equality constraints and explicit linear constraints)</li>
+<li>KNITRO</li>
+<li>IPOPT (not recommended)</li>
+<li>SNOPT (not recommended)</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="least-squares">
+<h2>+least_squares<a class="headerlink" href="#least-squares" title="Permalink to this headline">¶</a></h2>
+<p>This package contains interfaces for solving linear systems of the form</p>
+<div class="math">
+\[\begin{split}\begin{bmatrix} I &amp; A \\ A^T &amp; -\delta^2 I \end{bmatrix} \begin{bmatrix} p \\ q \end{bmatrix} = \begin{bmatrix} u \\ v \end{bmatrix}.\end{split}\]</div>
+<p>Each interface must implement 2 methods (other than a constructor):</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">self</span> <span class="pre">=</span> <span class="pre">preprocess_local(self,</span> <span class="pre">A,</span> <span class="pre">Aprod,</span> <span class="pre">Atprod,</span> <span class="pre">Q,</span> <span class="pre">options)</span></code></li>
+<li><code class="docutils literal"><span class="pre">[q,p]</span> <span class="pre">=</span> <span class="pre">lsq_local(u,</span> <span class="pre">v)</span></code></li>
+</ul>
+<p>Currently supported linear system solvers:</p>
+<blockquote>
+<div><ul>
+<li><p class="first">Semi-normal equations (<code class="docutils literal"><span class="pre">lssne</span></code>)</p>
+<blockquote>
+<div><ul class="simple">
+<li>Requires that Jacobian is explicitly available</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">LDL (<code class="docutils literal"><span class="pre">lsldl</span></code>)</p>
+<blockquote>
+<div><ul class="simple">
+<li>Requires that Jacobian is explicitly available</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first">LNLQ (<code class="docutils literal"><span class="pre">lslnlq</span></code>)</p>
+</li>
+<li><p class="first">MINRES (<code class="docutils literal"><span class="pre">lsminres</span></code>) (not recommended)</p>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="utils-and-helpers">
+<h2>+utils and +helpers<a class="headerlink" href="#utils-and-helpers" title="Permalink to this headline">¶</a></h2>
+<p>Contains various utilities and helper functions used throughout.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="input-output.html" class="btn btn-neutral" title="Input-Output" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Ron Estrin, Michael P. Friedlander, Dominique Orban, Michael A. Saunders.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: ''
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -24,7 +24,6 @@ classdef trpcg_solver < matlab.mixin.Copyable
 
    properties
       fletcher_solver % handle to fletcher_solver object
-      fid             % File for log output
 
       options = struct();  % Options struct for ipopt
 
@@ -39,14 +38,10 @@ classdef trpcg_solver < matlab.mixin.Copyable
    methods
      
       function self = trpcg_solver(fletcher_solver, varargin)
-         % SNOPT_SOLVER Constructor
+         % TRPCG_SOLVER Constructor
          %
          % Required Inputs:
          %    fletcher_solver   pointer to supersolver
-         %
-         % Optional Inputs:
-         %    x0                initial point
-         %    fid               filename for log
 
          if ~solvers.trpcg_solver.mf_valid(fletcher_solver.mf)
              ME = MException('FLETCHER_SOLVER:TRPCG_SOLVER',...
@@ -56,10 +51,7 @@ classdef trpcg_solver < matlab.mixin.Copyable
          
          p = inputParser;
          p.KeepUnmatched = false;
-         p.addParameter('fid', '');
          p.parse(varargin{:});
-         
-         self.fid = p.Results.fid;
          
          self.fletcher_solver = fletcher_solver;
          
