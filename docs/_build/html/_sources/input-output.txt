@@ -10,7 +10,7 @@ The basic solver is called via
 
 **Note**: the original problem (nlp) should be expressed in slack form (equality constraints only).
 
-fletcher_solver Inputs
+fletcher_solver inputs
 ----------------------
 
 ================= ======== ================ ===========
