@@ -27,7 +27,6 @@ classdef bcflash_solver < bcflash
    properties
       fletcher_solver % handle to fletcher_solver object
       x0              % Initial point
-      fid             % Handle to log file
         
       logH = '%5s  %4s'
       logB = '%5i  %4s'
@@ -56,7 +55,7 @@ classdef bcflash_solver < bcflash
          p.KeepUnmatched = false;
          p.addParameter('subsolver_options', struct(), @isstruct);
          p.addParameter('x0', fletcher_solver.mf.x0);
-         p.addParameter('fid', -1);
+         p.addParameter('fid', 0);
          p.parse(varargin{:}); 
          subsolver_options = p.Results.subsolver_options;
          self = self@bcflash(fletcher_solver.mf, subsolver_options);
@@ -65,7 +64,7 @@ classdef bcflash_solver < bcflash
          self.callback = @post_iteration;
          
          self.x0 = p.Results.x0;
-         self.fid = p.Results.fid;
+         %self.fid = p.Results.fid;
          self.fletcher_solver = fletcher_solver;
       end
     

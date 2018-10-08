@@ -16,7 +16,7 @@ fletcher_solver inputs
 ================= ======== ================ ===========
 Name              Required Default          Description
 ================= ======== ================ ===========
-nlp               required                  Optimization problem to be solved (nlpmodel)   
+nlp               required                  Optimization problem to be solved (nlpmodel)
 fid               optional 1                Save iteration log in subsolver.log?
 logLevel          optional 1                0 (don't print log), 1 (print log)
 nlnFlag           optional 1                Keep linear constraints explicit?
@@ -30,8 +30,8 @@ delta_dec         optional ``@(d) d/10``    Function to update delta
 lsq_options       optional ``struct()``     See below
 lsq_method        optional LSQ_SNE          Method for solving augmented system
 subsolver         optional BCFLASH          Solver for minimizing penalty function
-optTolAbs         optional :math:`10^{-6}`  Absolute tolerance for Lagrangian gradient   
-optTolRel         optional :math:`10^{-6}`  Relative tolerance for Lagrangian gradient   
+optTolAbs         optional :math:`10^{-6}`  Absolute tolerance for Lagrangian gradient
+optTolRel         optional :math:`10^{-6}`  Relative tolerance for Lagrangian gradient
 feaTolAbs         optional :math:`10^{-6}`  Absolute tolerance for primal feasibility
 feaTolRel         optional :math:`10^{-6}`  Relative tolerance for primal feasibility
 max_iterations    optional 500              Maximum number of outer iterations
@@ -47,11 +47,10 @@ lsq_options
 Depends on ``lsq_method``:
 
 * LSQ_SNE
-
 	================= ================ ===========
 	Name              Default          Description
 	================= ================ ===========
-	regularized       true             Regularize penalty function?   
+	regularized       true             Regularize penalty function?
 	delta_max         :math:`10^{-4}`  Maximum regularization parameter
 	cond_max          :math:`10^8`     Maximum allowable condition number of :math:`A`
 	================= ================ ===========
@@ -60,7 +59,7 @@ Depends on ``lsq_method``:
 	================= ================ ===========
 	Name              Default          Description
 	================= ================ ===========
-	regularized       true             Regularize penalty function?   
+	regularized       true             Regularize penalty function?
 	delta_max         :math:`10^{-4}`  Maximum regularization parameter
 	cond_max          :math:`10^8`     Maximum allowable condition number of :math:`A`
 	static_p          false            Use static reordering? If true, LDL is faster but possibly unstable.
@@ -70,7 +69,7 @@ Depends on ``lsq_method``:
 	================= ================ ===========
 	Name              Default          Description
 	================= ================ ===========
-	regularized       true             Regularize penalty function?   
+	regularized       true             Regularize penalty function?
 	delta_max         :math:`10^{-4}`  Maximum regularization parameter
 	tol               :math:`10^{-8}`  Residual norm at tolerance
 	================= ================ ===========
@@ -79,10 +78,10 @@ Depends on ``lsq_method``:
 	===================== ================ ===========
 	Name                  Default          Description
 	===================== ================ ===========
-	regularized           true             Regularize penalty function?   
+	regularized           true             Regularize penalty function?
 	delta_max             :math:`10^{-4}`  Maximum regularization parameter
 	termination_condition TOL_RESIDUAL     TOL_RESIDUAL or TOL_ERROR
-	tol                   :math:`10^{-8}`  Residual or error norm at tolerance	
+	tol                   :math:`10^{-8}`  Residual or error norm at tolerance
 	===================== ================ ===========
 
 subsolver_options
@@ -91,24 +90,20 @@ subsolver_options
 Depends on ``subsolver``:
 
 * BCFLASH
-
 	See BCFLASH for optional arguments.
 
 * KNITRO
-
 	===================== ================ ===========
 	Name                  Default          Description
 	===================== ================ ===========
 	x0                    nlp.x0           Initial point
-	opt_file              []               Options file for KNITRO 	
+	opt_file              []               Options file for KNITRO
 	===================== ================ ===========
 
 * TRPCG
-
 	None for now.
 
 * IPOPT
-
 	===================== ================ ===========
 	Name                  Default          Description
 	===================== ================ ===========
@@ -119,7 +114,6 @@ Depends on ``subsolver``:
 	===================== ================ ===========
 
 * SNOPT
-
 	===================== ================ ===========
 	Name                  Default          Description
 	===================== ================ ===========
