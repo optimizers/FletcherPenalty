@@ -30,6 +30,7 @@ classdef snopt_solver < matlab.mixin.Copyable
       fletcher_solver % handle to fletcher_solver object
       x0              % Initial point
       snfid           % File snopt output
+      fid             % Handle to log output
 
       new_sigma       % Updated value for sigma
       new_delta       % Updated value for delta
@@ -58,9 +59,11 @@ classdef snopt_solver < matlab.mixin.Copyable
          p.KeepUnmatched = false;
          p.addParameter('x0', fletcher_solver.mf.x0);
          p.addParameter('snfid', '');
+         p.addParameter('fid', -1);
          p.parse(varargin{:});
          
          self.x0 = p.Results.x0;
+         self.fid = p.Results.fid;
          self.snfid = p.Results.snfid;
          
          self.options.name = fletcher_solver.nlp.name;

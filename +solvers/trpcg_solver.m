@@ -24,6 +24,8 @@ classdef trpcg_solver < matlab.mixin.Copyable
 
    properties
       fletcher_solver % handle to fletcher_solver object
+      
+      fid             % Handle to log output
 
       options = struct();  % Options struct for ipopt
 
@@ -51,8 +53,10 @@ classdef trpcg_solver < matlab.mixin.Copyable
          
          p = inputParser;
          p.KeepUnmatched = false;
+         p.addParameter('fid', -1);
          p.parse(varargin{:});
          
+         self.fid = p.Results.fid;
          self.fletcher_solver = fletcher_solver;
          
          % Set parameters so that TRPCG only successfully exits on user request

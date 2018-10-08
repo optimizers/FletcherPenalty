@@ -26,6 +26,7 @@ classdef knitro_solver < matlab.mixin.Copyable
       fletcher_solver % handle to fletcher_solver object
       x0              % Initial point
       opt_file        % File for options
+      fid             % Handle to log file
 
       options = struct();  % Options struct for knitro
 
@@ -54,9 +55,11 @@ classdef knitro_solver < matlab.mixin.Copyable
          p.KeepUnmatched = false;
          p.addParameter('x0', fletcher_solver.mf.x0);
          p.addParameter('opt_file', []);
+         p.addParameter('fid', -1);
          p.parse(varargin{:});
          
          self.x0 = p.Results.x0;
+         self.fid = p.Results.fid;
          self.opt_file = p.Results.opt_file;
          n = length(self.x0);
          
