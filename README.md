@@ -1,4 +1,4 @@
-# Fletcher Penalty
+# FletcherPenalty
 
 ## Overview
 
