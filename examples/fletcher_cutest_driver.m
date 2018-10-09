@@ -15,7 +15,7 @@ import model.*
 % Path to directory containing compiled CUTEst problems
 % For example, if problem 3pk is to be run, then the compiled problem
 % should be in directory: cutest_path/3pk
-problem_path = '/home/restrin/Libraries/cutest/problems/compiled';
+problem_path = '';
 % Problem name
 pname = 'hs78';
 
