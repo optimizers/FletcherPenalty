@@ -55,7 +55,6 @@ classdef bcflash_solver < bcflash
          p.KeepUnmatched = false;
          p.addParameter('subsolver_options', struct(), @isstruct);
          p.addParameter('x0', fletcher_solver.mf.x0);
-         p.addParameter('fid', 0);
          p.parse(varargin{:}); 
          subsolver_options = p.Results.subsolver_options;
          self = self@bcflash(fletcher_solver.mf, subsolver_options);
@@ -63,8 +62,8 @@ classdef bcflash_solver < bcflash
          % Makes post_iteration a class method instead of static
          self.callback = @post_iteration;
          
+         self.verbose = 0;
          self.x0 = p.Results.x0;
-         %self.fid = p.Results.fid;
          self.fletcher_solver = fletcher_solver;
       end
     

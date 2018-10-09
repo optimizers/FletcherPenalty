@@ -29,7 +29,6 @@ classdef ipopt_solver < matlab.mixin.Copyable
    properties
       fletcher_solver % handle to fletcher_solver object
       x0              % initial point
-      fid             % file for log output
   
       funcs = struct();    % callback functions for ipopt
       options = struct();  % options struct for ipopt
@@ -53,13 +52,11 @@ classdef ipopt_solver < matlab.mixin.Copyable
          p.addParameter('mu_strategy', 'adaptive');
          p.addParameter('x0', fletcher_solver.mf.x0);
          p.addParameter('start_feasible', true);
-         p.addParameter('fid', '');
          p.parse(varargin{:});
          
          mu_strategy = p.Results.mu_strategy;
          self.x0 = p.Results.x0;
          start_feasible = p.Results.start_feasible;
-         self.fid = p.Results.fid;
          
          if start_feasible && size(fletcher_solver.mf.linear,1) > 0
             % Redefine x0 as the least-squares projection onto the
@@ -98,7 +95,6 @@ classdef ipopt_solver < matlab.mixin.Copyable
          self.options.ipopt.max_iter    = 1e6; % Supersolver controls max_iter
          self.options.ipopt.tol         = 1e-32; % ipopt won't exit on its own
          self.options.ipopt.hessian_approximation = 'limited-memory';
-         self.options.output_file = self.fid;
          
          self.fletcher_solver = fletcher_solver;
       end

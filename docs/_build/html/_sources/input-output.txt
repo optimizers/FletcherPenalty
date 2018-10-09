@@ -17,8 +17,8 @@ fletcher_solver inputs
 Name              Required Default          Description
 ================= ======== ================ ===========
 nlp               required                  Optimization problem to be solved (nlpmodel)
-fid               optional 1                Save iteration log in subsolver.log?
-logLevel          optional 1                0 (don't print log), 1 (print log)
+log_file          optional ''               Name of log file. By default displayed to console.
+log_level         optional 1                0 (don't print log), 1 (print log)
 nlnFlag           optional 1                Keep linear constraints explicit?
 sigma             optional 1                Penalty parameter
 sigma_min         optional :math:`10^{-6}`  Minimum penalty parameter

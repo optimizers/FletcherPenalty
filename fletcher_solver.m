@@ -21,7 +21,7 @@ classdef fletcher_solver
       exit = 0       % exit flag
       sigma_damp = 1 % Damping parameter for penalty parameter
       fid            % file ID for printing output
-      logLevel       % verbosity level
+      log_level       % verbosity level
       mf             % merit function object
       nlp            % original nlp object
       nlnFlag        % indicate if linear constraints treated explicitly
@@ -109,7 +109,7 @@ classdef fletcher_solver
          %
          % Optional inputs:
          %  fid               Save iteration log?
-         %  logLevel          Show output?
+         %  log_level         Show output?
          %  sigma             Initial penalty parameter
          %  sigma_max         Maximum allowable penalty parameter
          %  sigma_min         Minimum allowable penalty parameter
@@ -135,8 +135,8 @@ classdef fletcher_solver
          % ---------------------------------------------------------------------
          p = inputParser;
          p.KeepUnmatched = false;
-         p.addParameter('fid', 1);
-         p.addParameter('logLevel',2);
+         p.addParameter('log_file', '');
+         p.addParameter('log_level', 1);
 
          p.addParameter('sigma', 0);
          p.addParameter('sigma_max', 1e+6);
@@ -185,8 +185,9 @@ classdef fletcher_solver
          % ---------------------------------------------------------------------
          % Subsolver iteration log.
          % ---------------------------------------------------------------------
-         if ~isfield(subsolver_options,'fid')
-            subsolver_options.fid = fopen('subsolver.log','w');
+         self.fid = 1; % If no output log, print to screen
+         if ~strcmp(p.Results.log_file, '')
+            self.fid = fopen(p.Results.log_file, 'w');
          end
          
          % ---------------------------------------------------------------------
@@ -224,9 +225,8 @@ classdef fletcher_solver
          % Store various objects and parameters.
          % ---------------------------------------------------------------------
          self.mf = mfl;
-         self.fid = p.Results.fid;
          self.nlnFlag = mfl.nlnFlag;
-         self.logLevel = p.Results.logLevel;
+         self.log_level = p.Results.log_level;
          self.nlp = nlp;
          self.sigma_max = p.Results.sigma_max;
          self.sigma_min = p.Results.sigma_min;
@@ -240,19 +240,6 @@ classdef fletcher_solver
          self.iteration = 0;         
          self.delta_dec = p.Results.delta_dec;
          self.last_x = mfl.x0;
-
-         % ---------------------------------------------------------------------
-         % Obtain feasible initial point via proximal-point problem.
-         % ---------------------------------------------------------------------
-%          equality_constrained = all(self.nlp.jFre);
-%          if ~equality_constrained
-%             [self, x0, info] = self.proximal_point(x0);
-%             if info.exitFlag ~= 0
-%                self.subsolver_info = info;
-%                self.exit_msg = 'Proximal-point iteration failed.';
-%                return
-%             end
-%          end
                   
          % ---------------------------------------------------------------------
          % Start the clock!
@@ -336,7 +323,7 @@ classdef fletcher_solver
          % ----------------------------------------------------------------
          % Print headers.
          % ----------------------------------------------------------------
-         if self.logLevel
+         if self.log_level
             self.printf('\n');
             self.printf('%s\n',repmat('=',1,80));
             self.printf('FLASH \n');
@@ -393,7 +380,7 @@ classdef fletcher_solver
          % ----------------------------------------------------------------
          % Print exit log.
          % ----------------------------------------------------------------
-         if self.logLevel
+         if self.log_level
             self.printf('\n EXIT: %s\n', self.exit_msg);
             self.printf('\n')
             self.printf(' %-27s  %10i     %-22s  %15.8e\n',...
@@ -439,6 +426,13 @@ classdef fletcher_solver
             self.printf(' %-24s %10.2f (%3d%%)  %-25s %6.2f\n',...
                'Time for ghiv prods', t1, t1t,...
                'Time/eval for ghiv', t2);
+         end
+         
+         % ---------------------------------------------------------------------
+         % Close subsolver iteration log.
+         % ---------------------------------------------------------------------
+         if self.fid > 1
+            fclose(self.fid);
          end
          
       end % constructor
@@ -673,7 +667,7 @@ classdef fletcher_solver
          % ------------------------------------------------------------
          % Print log.
          % ------------------------------------------------------------
-         if self.logLevel
+         if self.log_level
             if mod(self.iteration, 20) == 0
                self.logHeader(logHeader)
             end
@@ -698,7 +692,7 @@ classdef fletcher_solver
                self.iteration, fPhi, f, self.mf_grad, self.du_feas, ...
                nlnFeas, linFeas, norm(y), sigstr, delstr, norm(self.last_x - x));
            
-            fprintf([default_log log]);
+            self.printf([default_log log]);
            
             self.printf('\n');   
          end
@@ -718,7 +712,7 @@ classdef fletcher_solver
          %CHECK_GRADIENT
          [result, eabs, erel] = helpers.gradient_check(self.mf, x);
          if ~result
-            fprintf('Gradient check failed : eAbs = %1.3e, eRel = %1.3e\n', eabs, erel);
+            self.printf('Gradient check failed : eAbs = %1.3e, eRel = %1.3e\n', eabs, erel);
          end
       end
 
@@ -753,53 +747,9 @@ classdef fletcher_solver
 
       function logHeader(self, subsolver_header)
          self.printf(self.logH, self.logT{:});
-         fprintf(subsolver_header);
-         fprintf('\n');
+         self.printf(subsolver_header);
+         self.printf('\n');
       end
-
-      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%       function [self, x, info] = proximal_point(self, x0)
-%          %PROXIMAL_POINT Proximal-point algorithm for feasible initial point.
-%          t = tic;
-%          n = length(x0);
-%          jLow = self.nlp.jLow;
-%          x0(jLow) = max(x0(jLow), 1);
-%          [x, ~, info] = fletcher.subsolver(...
-%             x0, ...
-%             @(x)f_prox_point_log(x), ...
-%             @(x)g_prox_point_log(x), ...
-%             'funHes', @(x,y)Hess_log(x), ...
-%             'Aeq', self.nlp.Aeq, 'beq', self.nlp.beq, ...
-%             'bl', self.nlp.bL, 'bu', self.nlp.bU, ...
-%             'HessPattern', speye(n), ...
-%             'hessopt', 1, ...
-%             'outlev', 0, ...
-%             'presolve', 0 ...
-%          );
-%          self.time_prox_point = self.time_prox_point + toc(t);
-%       
-%          function f = f_prox_point_log(x)
-%             f = -sum(log(x(jLow))) + 0.5*norm(x-x0)^2;
-%          end
-%          function g = g_prox_point_log(x)
-%             g = zeros(n, 1);
-%             g( jLow) = -1./x(jLow);
-%             g = g + x - x0;
-%          end
-%          function H = Hess_log(x)
-%             hdiag = ones(n,1);
-%             hdiag(jLow) = 1 + x(jLow).^(-2);
-%             H = spdiags(hdiag, 0, n, n);
-%          end
-%          function [f, g] = prox_point(x) %#ok<DEFNU>
-%             g = x - x0;
-%             f = 0.5*norm(g)^2;
-%          end
-%          function H = Hess_prox(~) %#ok<DEFNU>
-%             H = speye(n);
-%          end
-%       end
 
    end % methods
 
