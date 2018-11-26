@@ -164,8 +164,8 @@ classdef fletcher_merit_function < model.nlpmodel & handle
          % Compute quantities needed for LS multipliers.
          try
             % Do not build preconditioner unless required
-            P = @() self.nlp.preconditioner(x);
-            min_singular_val = self.nlp.gcon_min_singular_value(x);
+            P = @() self.nlp.gcon_prcnd(x);
+            min_singular_val = self.nlp.gcon_sval(x);
             solve_opts = struct('preconditioner', P, ...
                 'min_singular_val', min_singular_val);
             self.lsq = preprocess(self.lsq, J', Jtprod, Jprod, Q, solve_opts);
@@ -207,7 +207,11 @@ classdef fletcher_merit_function < model.nlpmodel & handle
          end
          
          % gradient of 'reduced' Lagrangian (ignore linear constraints)
-         gRL = gL + Jtprod(yExp);      
+         if sum(self.iExp) == 0
+            gRL = gL;
+         else
+            gRL = gL + Jtprod(yExp);  
+         end
          self.val.gRL = gRL;           % ... store it
          
          fPhi = f - c'*y + 0.5*self.rho*(c'*c);    % merit function value
