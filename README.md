@@ -10,6 +10,10 @@ problems of the form
 It is based on the smooth penalty function originally introduced by Fletcher in
 the 1970's [1].
 
+## Documentation
+
+Hosted on <a href="https://fletcherpenalty.readthedocs.io/en/latest/index.html">ReadTheDocs</a>.
+
 ## Installation
 
 ### Dependencies
