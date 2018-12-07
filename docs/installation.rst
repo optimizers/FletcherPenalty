@@ -31,7 +31,7 @@ Dependencies
 .. _Model: https://github.com/optimizers/model
 .. _SuiteSparse: http://faculty.cse.tamu.edu/davis/suitesparse.html
 .. _BCFLASH: https://github.com/restrin/bcflash
-.. _CUTEst: https://github.com/optimizers/cutest-mirror
+.. _CUTEst: https://github.com/ralna/CUTEst
 .. _LinearSystemSolvers: https://github.com/restrin/LinearSystemSolvers
 .. _Intrelab: https://github.com/trilinos/Trilinos/tree/master/packages/intrepid/matlab/intrelab
 .. _Trilinos: https://trilinos.org/
